@@ -1,4 +1,4 @@
-<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/logo.png" width="700">
+<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/logo.png" width="400">
 
 CRISPRClassify identifies loci from assembled genomic and metagenomic files (.fasta), and uses a *cas*-independent classification approach to predict the subtype of each locus.
 
@@ -42,13 +42,13 @@ Listening on http://127.0.0.1:3014
 
 Once the app is running, you will see this page:
 
-<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/start.png" width="500">
+<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/start.png" width="700">
 
 
 
 ---
 ## Output
-<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/columns.png" width="500">
+<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/columns.png" width="700">
 The grid output contains the following columns:
 
  - **Locus:**  Numeric designation for each detected CRISPR array
@@ -66,7 +66,7 @@ The grid output contains the following columns:
 #### Importing files:
 Included in the **/example_files** directory is the genome of *Streptococcus thermophilus* DGCC 7710 to use as an example. These contigs are also available via NCBI: NZ_AWVZ01000001.1, NZ_AWVZ01000002.1, and NZ_AWVZ01000003.1. Click the **Browse** button in CRISPRclassify and select example_DGCC7710.fasta, then click Classify. The results should match the image below:
 
-<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/example.png" width="500">
+<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/example.png" width="700">
 
 
 The calculated results display distinct repeats from each of the four loci. Loci 1 and 2 are predicted to be subtype II-A, while locus 3 is classified as III-A and locus 4 is predicted to be subtype I-E. The distinct k-mers that significantly contribute to the classification of each subtype are highlighted in blue (forward) and yellow (reverse complement). If we did not know the genus or species that these loci belonged to (for example, processing a metagenomic data set with potentially several genera), the **Closest Strain** column can give us some idea of what organism we're working with.
