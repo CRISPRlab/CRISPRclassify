@@ -9,11 +9,34 @@ CRISPRclassify identifies loci from assembled genomic and metagenomic files (.fa
 CRISPRclassify is implemented in R and is run locally from the command line. For **MacOS** and **Linux**, just ensure you have met the R and Java dependencies below. For **Windows** users, you can use a tool like [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or another command line solution to get access to the Linux command line.
 
 #### Software requirements:
-- **R** >= version 4.0.2
+- **R** >= version 3.6.3
 
-  Many users install R by downloading the [RStudio IDE](https://rstudio.com/). If you prefer a manual R installation, see [here](https://www.r-project.org/).
+`R --version`
+```
+R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+```
+
+  There are many tutorials for installing or updating [R](https://www.r-project.org/) to the minimum required version. One that covers Mac, Linux, and Windows is [listed here](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu). This application is dependant on several R packages which are **automatically installed** by running ./start.r:
+  - shiny
+  - tidyverse
+  - DT
+  - xgboost
+  - memoise
+  - stringdist
+
+  Should any errors occur while running the start script, see **Troubleshooting** below.
 
 - **Java** >= version 1.8
+
+`Java -version`
+```
+java version "1.8.0_202-ea"
+Java(TM) SE Runtime Environment (build 1.8.0_202-ea-b03)
+Java HotSpot(TM) 64-Bit Server VM (build 25.202-b03, mixed mode)
+```
+
 
   Mac users -> [Install Java on MacOS](https://opensource.com/article/20/7/install-java-mac)
 
@@ -77,8 +100,20 @@ The grid output contains the following columns:
 
 ---
 
-### Pro tips and Troubleshooting
+### Pro tips
 **Tech Note:** the current size limit is set limit uploaded file size to 135GB (gigabytes, not bases). If you wish to process a file larger than this, you'll need to set the GB_size flag in app.R to a higher number that will suit your needs:
 ```
 GB_size <- 135
 ```
+---
+### Troubleshooting
+#### 1) Error: dependencies ‘httr’, ‘rvest’, ‘xml2’ are not available for package ‘tidyverse’. installation of package ‘tidyverse’ had non-zero exit status
+ - Tidyverse has some non-R package dependencies required in order to function correctly. In Linux, you can run the following to ensure they are installed:
+ ```
+ sudo apt install libcurl4-openssl-dev libssl-dev libxml2-dev
+ ```
+ Additionally, if you see
+ `could not find function ggplot; str_c; arrange;`, this is an indicator that the tidvyverse package was not installed correctly.
+
+#### 2) Error in readRDS(file) :  cannot read workspace version 3 written by R 3.6.3; need R 3.5.0 or newer
+  - Ensure your version of R is >= 3.6.3. Instructions on how to do so are [listed here](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu).
