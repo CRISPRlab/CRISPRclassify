@@ -117,3 +117,18 @@ GB_size <- 135
 
 #### 2) Error in readRDS(file) :  cannot read workspace version 3 written by R 3.6.3; need R 3.5.0 or newer
   - Ensure your version of R is >= 3.6.3. Instructions on how to do so are [listed here](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu).
+
+#### 3) Generic 'could not find function ...'
+ - The dependencies for this project include **shiny, tidyverse, DT, xgboost, memoise and stringdist**. Ensure each of these packages is installed. To check the package version, in R run:
+
+ `packageVersion("packageName")`
+
+ Ex.
+```
+packageVersion("DT")
+[1] ‘0.15’
+```
+
+  To see all attached and loaded packages, run:
+
+  `sessionInfo()`
