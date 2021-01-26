@@ -8,8 +8,8 @@ CRISPRclassify identifies loci from assembled genomic and metagenomic files (.fa
 
 CRISPRclassify is implemented in R and is run locally from the command line. For **MacOS** and **Linux**, just ensure you have met the R and Java dependencies below. For **Windows** users, you can use a tool like [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or another command line solution to get access to the Linux command line.
 
-#### Software requirements:
-- **R** >= version 3.6.3
+### Software requirements:
+- #### **R** >= version 3.6.3
 
 `R --version`
 ```
@@ -26,9 +26,10 @@ Platform: x86_64-apple-darwin17.0 (64-bit)
   - memoise
   - stringdist
 
-  Should any errors occur while running the start script, see **Troubleshooting** below.
+  Should any errors occur while running the start script, see **Troubleshooting** at the bottom of this page.
+<br/>
 
-- **Java** >= version 1.8
+- #### **Java** >= version 1.8
 
 `Java -version`
 ```
@@ -73,7 +74,7 @@ Once the app is running, you will see this page:
 
 
 ---
-## An Example Analysis
+# An Example Analysis
 
 #### Importing a file:
 Included in the **/example_files** directory is the genome of *Streptococcus thermophilus* DGCC 7710 to use as an example. These contigs are also available via NCBI: NZ_AWVZ01000001.1, NZ_AWVZ01000002.1, and NZ_AWVZ01000003.1. Click the **Browse** button in CRISPRclassify and select example_DGCC7710.fasta, then click Classify. The results should match the image below:
@@ -85,7 +86,7 @@ The calculated results display distinct repeats from each of the four loci. Loci
 
 ---
 
-## Output
+# Output
 <img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/columns.png" width="800">
 The grid output contains the following columns:
 
@@ -100,13 +101,13 @@ The grid output contains the following columns:
 
 ---
 
-### Pro tips
+# Pro tips
 **Tech Note:** the current size limit is set limit uploaded file size to 135GB (gigabytes, not bases). If you wish to process a file larger than this, you'll need to set the GB_size flag in app.R to a higher number that will suit your needs:
 ```
 GB_size <- 135
 ```
 ---
-### Troubleshooting
+# Troubleshooting
 #### 1) Error: dependencies ‘httr’, ‘rvest’, ‘xml2’ are not available for package ‘tidyverse’. installation of package ‘tidyverse’ had non-zero exit status
  - Tidyverse has some non-R package dependencies required in order to function correctly. In Linux, you can run the following to ensure they are installed:
  ```
