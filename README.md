@@ -68,20 +68,20 @@ Listening on http://127.0.0.1:6923
 Alternatively, you can download the package to your local machine, and install from there.
 1. Download the **.zip** from GitHub.
 
-2. Extract the .zip file to a folder, for example, on your Desktop.
+2. Extract the .zip file to a folder, for example, on your Desktop. The folder will be named CRISPRclassify-master.
 
 3. Install the package via command line:
 
   `cd ~/Desktop`
 
-  `R CMD INSTALL CRISPRclassify`
+  `R CMD INSTALL CRISPRclassify-master`
 
 4. Open the RStudio console, or an R session on the command line by typing 'R'.
 
 5. Load the CRISPRclassify package and launch the app:
 
   `library(CRISPRclassify)`
-  
+
   `CRISPRclassify::launchApp()`
 
 <br/>
