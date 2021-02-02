@@ -18,15 +18,7 @@ Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin17.0 (64-bit)
 ```
 
-  There are many tutorials for installing or updating [R](https://www.r-project.org/) to the minimum required version. One that covers Mac, Linux, and Windows is [listed here](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu). This application is dependant on several R packages which are **automatically installed** by running ./start.r:
-  - shiny
-  - tidyverse
-  - DT
-  - xgboost
-  - memoise
-  - stringdist
-
-  Should any errors occur while running the start script, see **Troubleshooting** at the bottom of this page.
+  There are many tutorials for installing or updating [R](https://www.r-project.org/) to the minimum required version. One that covers Mac, Linux, and Windows is [listed here](https://www.datacamp.com/community/tutorials/installing-R-windows-mac-ubuntu).
 <br/>
 
 - #### **Java** >= version 1.8
@@ -45,28 +37,54 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.202-b03, mixed mode)
 
 
 ---
-#### Download and Run:
-1. Download or clone this repository into a folder, for example, on your desktop:
+### Install Directly from GitHub (Recommended):
+1. Open the RStudio console, or start an R session on the command line by typing 'R'.
+
+2. Install and load the devtools package, which enables installing packages from GitHub:
+
+  `install.packages("devtools")`
+
+  `library(devtools)`
+
+3. Install the CRISPRclassify package, and launch the app:
+
+  `install_github("CRISPRlab/CRISPRclassify")`
+
+  `library(CRISPRclassify)`
+
+  `CRISPRclassify::launchApp()`
+
+
+The first time the launchApp() script is run, it will automatically install the required R library dependencies. Running launchApp() will automatically launch CRISPRclassify in a local web-browser window, ready for use!
+
+**Tech Note:** The port is randomly assigned at runtime. If you close the page or are just curious about the URL, you can see the port listed in the command line output:
+
+```
+Listening on http://127.0.0.1:6923
+```
+<br/>
+
+### Or Download Package from GitHub:
+Alternatively, you can download the package to your local machine, and install from there.
+1. Download the **.zip** from GitHub.
+
+2. Extract the .zip file to a folder, for example, on your Desktop.
+
+3. Install the package via command line:
 
   `cd ~/Desktop`
 
-  `git clone https://github.com/CRISPRlab/CRISPRclassify.git`
+  `R CMD INSTALL CRISPRclassify`
 
-2. CD into the newly created folder, and run the start script:
+4. Open the RStudio console, or an R session on the command line by typing 'R'.
 
-  `cd CRISPRclassify/`
+5. Load the CRISPRclassify package and launch the app:
 
-  `./start.r`
+  `library(CRISPRclassify)`
+  
+  `CRISPRclassify::launchApp()`
 
-
-The first time the **start.r** script is run, it will automatically install the required R library dependencies. The Shiny library in particular takes some time to download, so it may take a few minutes to complete. Running **start.r** will automatically launch CRISPRclassify in a local web-browser window, ready for use!
-
-**Tech Note:** the port is set to 4455 by default. If you need to change this for any reason, the port can be modified in the **start.r** script.
-
-```
-Listening on http://127.0.0.1:4455
-```
-
+<br/>
 Once the app is running, you will see this page:
 
 <img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/start.png" width="800">
