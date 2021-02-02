@@ -1,0 +1,6 @@
+library(tidyverse)
+setwd("~/git/cr_tool/CRISPRclassify/data-raw/")
+cr_fasta_dao <- read_file("cr_fasta_dao.R")
+cr_service <- read_file("cr_service.R")
+setup_data <- read_file("load_internal_data.R")
+usethis::use_data(cr_fasta_dao, cr_service, setup_data, internal = T, overwrite = T)

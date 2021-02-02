@@ -61,10 +61,10 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.202-b03, mixed mode)
 
 The first time the **start.r** script is run, it will automatically install the required R library dependencies. The Shiny library in particular takes some time to download, so it may take a few minutes to complete. Running **start.r** will automatically launch CRISPRclassify in a local web-browser window, ready for use!
 
-**Tech Note:** the server port is automatically assigned at runtime. The browser window will automatically launch with the assigned port in the URL, but if you accidentally close the page or are just curious, you can see the port in the terminal output:
+**Tech Note:** the port is set to 4455 by default. If you need to change this for any reason, the port can be modified in the **start.r** script.
 
 ```
-Listening on http://127.0.0.1:3014
+Listening on http://127.0.0.1:4455
 ```
 
 Once the app is running, you will see this page:
