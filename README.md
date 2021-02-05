@@ -117,6 +117,7 @@ The grid output contains the following columns:
  - **Probability:** The probability that this locus is the predicted subtype. Higher is better.
  - **Closest Strain:** Lists the strain with the closest matching repeat sequence from the original training set. Useful when working with metagenomes.
 
+<br/>
  More information on this strain from the training data can be found in the **Download** file after hitting the **Download** button:
   - Strain name
   - Accession
