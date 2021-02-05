@@ -18,4 +18,4 @@ VignetteBuilder: knitr
 Config/testthat/edition: 3
 Depends: R (>= 3.6.3)
 NeedsCompilation: no
-Packaged: 2021-02-02 17:31:27 UTC; mnethery
+Packaged: 2021-02-05 19:04:13 UTC; mnethery

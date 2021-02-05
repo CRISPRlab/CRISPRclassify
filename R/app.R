@@ -1,8 +1,5 @@
 
-
 ## -------------------------- ##
-# setwd("/Users/mnethery/Dropbox/NCSU/CRISPRLab/Mine_sh/mine_code/__bitbucket__/cr_tool")
-
 
 #' @examples
 #' launchApp()
@@ -20,23 +17,20 @@ launchApp <- function() {
   require(stringi)
   require(stringdist)
   require(ggplot2)
+  require(fs)
   #TODO these require statements might not be needed after qualifying all function names
 
-
-  wrkDir <- str_c(getwd(), "/data-raw")
+  wrkDir <- fs::path_package("CRISPRclassify")
   print(str_c("working directory is ", wrkDir))
   selectedFullModel <- '1'
   selectedSeqModel <- '1'
 
   options(java.parameters = "-Xmx8G")
-  GB_size <- 135
+  GB_size <- 200
   options(shiny.maxRequestSize=GB_size*1000*1024^2)
   ## Manage shiny script permissions ##
-  system(str_c("chmod +x ",wrkDir,"/crVSkeleton.sh"))
-  system(str_c("chmod +x ",wrkDir,"/java/minced/minced"))
-
-  #system("chmod +x ./crVSkeleton.sh")
-  #system("chmod +x ./java/minced/minced")
+  system(str_c("chmod +x ",wrkDir,"/lib/crVSkeleton.sh"))
+  system(str_c("chmod +x ",wrkDir,"/lib/java/minced/minced"))
 
   css <- "
 .fileSelectDiv {
@@ -114,7 +108,6 @@ getPalIdx <- function(seq){
   sum(str_split(seq, "")[[1]] == str_split(stri_reverse(seq),"")[[1]])/nchar(seq)
 }
 
-
 getContigName <- function(id){
   return(str_split(id, "_CRISPR")[[1]][1])
 }
@@ -142,7 +135,6 @@ getLocusNamesLabels <- function(dat_vect){
   }
   return(locus_name_vect)
 }
-
 
 getAllFastaDtl <- function(datapath){
 
@@ -230,7 +222,6 @@ getSequenceAnalyticDf <- function(datapath){
   spacer_file = paste(datapath, "_spacers.fa", sep="")
   repeat_file = paste(datapath, "_repeats.fa", sep="")
 
-
   all_fasta_df <- getAllFastaDtl(datapath)
 
   #get spacer count and average spacer length
@@ -239,7 +230,6 @@ getSequenceAnalyticDf <- function(datapath){
   spacer_df <- getSpacerDf(spacer_file, datapath)
 
   all_fasta_df %>% left_join(repeat_df)
-
 
   sequence_analytic_df <- repeat_df %>% inner_join(spacer_df, by = c("locus", "contig_name")) %>%
     mutate(repeat_spacer_ratio = average_repeat_length/avg_spacer_length,
@@ -252,8 +242,8 @@ getSequenceAnalyticDf <- function(datapath){
 
 
 
-xg_matrix_format_file <- str_c(wrkDir,"/matrix_format_2020-12-04_nchar_5.csv")
-feat_imp_file <- str_c(wrkDir,"/xg_feature_importance_5_2020-12-04.csv")
+xg_matrix_format_file <- str_c(wrkDir,"/csvRef/matrix_format_2020-12-04_nchar_5.csv")
+feat_imp_file <- str_c(wrkDir,"/csvRef/xg_feature_importance_5_2020-12-04.csv")
 cas_vect <- c('I-A','I-B','I-C','I-D','I-E','I-F','I-U','II-A','II-B','II-C','III-A','III-B','III-C','III-D','III-E','III-F','IV-A','IV-C','V-A','V-B1','V-B2','V-F','V-J','V-U1','V-U2','V-U4','VI-A','VI-B','VI-C','VI-D')
 n_char_cnt <- 5
 
@@ -297,14 +287,8 @@ getSyntaxHighlightedSequence <- function(seq, type){
   # print(feat_vect)
   formatted_seq <- seq
   for (feat in feat_vect) {
-    # print(".....................")
-    # print(formatted_seq)
     formatted_seq <- str_replace_all(formatted_seq,getReverseCompliment(feat), ngramToHtmlBlue)
     formatted_seq <- str_replace_all(formatted_seq,feat, ngramToHtmlOrange)
-
-    # print(getReverseCompliment(feat))
-    # print(formatted_seq)
-    # print(formatted_seq)
   }
 
   return(formatted_seq)
@@ -346,27 +330,7 @@ getXGModel <- function(cas){
 }
 getXGModelCache <- getXGModel
 
-#getRepeatDF <- function(){
-#  wrkDir <- getwd()
-#
-#   read_csv(sprintf('%s/data/meta.fasta_repeats.fa', wrkDir), col_names = F) %>%
-#    mutate(X2 = lead(X1)) %>%
-#    dplyr::rename(id = X1, sequence = X2) %>%
-#    filter(!str_detect(sequence, ">")) %>%
-#    mutate(id = str_replace_all(id, ">", "")) %>% return()
-#}
-
 getTokenDF <- function(sequence_analytic_df){
-  # c('test_id')
-  # c('GTCGCTCCCCGTGCGGGAGCGTGGATAGCCGA')
-  #   token_df <- do.call("rbind", mapply(get_tokens,  c('GTCGCTCCCCGTGCGGGAGCGTGGATAGCCGA'), c('test_id'), SIMPLIFY = F)) %>%
-  #     rename(value = token_count) %>%
-  #     mutate(value = as.numeric(value)) %>%
-  #     dplyr::select(id, feature, value) %>%
-  #     rename(unique_id = id) %>%
-  #     pivot_wider(names_from = feature, values_from = value, values_fill = 0)
-  #
-  #   token_df %>% write_csv("cr_local_test_record.csv")
 
   token_df <- do.call("rbind", mapply(get_tokens, sequence_analytic_df$seq, sequence_analytic_df$unique_id, SIMPLIFY = F)) %>%
     rename(value = token_count) %>%
@@ -383,7 +347,7 @@ strainLkp <- function(repeatSeq, masterLkpDf){
   return(org)
 }
 
-getXGBoostPredictions <- function(sequence_analytic_df){
+getXGBoostPredictions <- function(sequence_analytic_df, progress){
   print("...Getting xgboost predictions...")
   all_feat_vect <- read_csv(xg_matrix_format_file, col_names = F) %>% dplyr::select(X3) %>% distinct() %>% pull()
   token_df <- getTokenDF(sequence_analytic_df)
@@ -399,9 +363,12 @@ getXGBoostPredictions <- function(sequence_analytic_df){
   result_df <- tibble(unique_id = as.character(), seq = as.character(), cas_type = as.character(), probability = as.double())
 
   # cas <- 'I-E'
+  allCasN <- length(cas_vect)
+  adjustmentInc <- (allCasN + (.1 * allCasN)) ## since we start on .1, account for that ##
   for (cas in cas_vect){
 
     print(str_c("running: ", cas))
+    progress$inc(1/adjustmentInc, message = str_c("Checking ", cas, "."))
 
     if (file.exists(getModelFilePath(cas))){
       cas_feature_vect <- read_csv(xg_matrix_format_file, col_names = F) %>% filter(X1 == cas) %>% dplyr::select(X3) %>% pull()
@@ -422,18 +389,22 @@ getXGBoostPredictions <- function(sequence_analytic_df){
       }
 
     }
+
+    else {print("file doesnt exist")}
   }
 
-  #result_df %>% write_csv("_tmp_full_output.csv")
+  progress$set(message = "Looking up closest strains. ", detail = 'Just a moment...', value = .98)
+  # result_df %>% write_csv("_tmp_full_output.csv")
   max_result_df <- result_df %>% group_by(unique_id) %>% filter(probability == max(probability)) %>% ungroup() %>%  select(seq,cas_type, distinct_repeat_count , probability,contig_name, range, locus)
-  lkpMaster <- read_csv(str_c(wrkDir, '/master_repeat_lkp.csv'))
+  lkpMaster <- read_csv(str_c(wrkDir, '/csvRef/master_repeat_lkp.csv'))
   max_result_df_lkp <- transform(max_result_df, closestStrain = strainLkp(seq, lkpMaster))
+  progress$set(message = "Wrapping up. ", detail = 'Just a moment...', value = 1)
   return(max_result_df_lkp)
 }
 
 
 
-
+## ------------------------- SHINY APP BEGIN --------------------- ##
   shinyApp(
 
 
@@ -477,43 +448,7 @@ ui <- fluidPage(
     )
   )
 
-
-
-
-
-  # tags$head(tags$style(HTML(css))),
-  # # useShinyjs(),
-  # img(src='logo.png', height=62,width=300) %>% tagAppendAttributes(class = 'logo'),
-  # sidebarLayout(
-  #   sidebarPanel(
-  #     fileInput("inFile", h4("Choose Genomic .FASTA File"),
-  #               multiple = FALSE,
-  #               accept = c("text/comma-separated-values,text/plain",
-  #                          ".fasta",
-  #                          ".fna",
-  #                          ".fa")),
-  #    uiOutput("dynamicUI"),
-  #    br(),
-  #    uiOutput("dynamicUIDownload"),
-  #   ),
-  #   mainPanel(
-  #     plotOutput("cas_dist_plot"),
-  #     DT::dataTableOutput("classified_results")
-  #     )
-  # )
 ),
-
-# code run here outside of server function will be called once per R session
-
-# resetUI <- function(values){
-  # print('resetting UI')
-  # print(values$fileStatus)
-  # values$fileStatus <- 'empty'
-
-  # progress <- shiny::Progress$new()
-  # progress$set(message = "Finding CRISPR repeats...", value = 10)
-  # on.exit(progress$close(), add=TRUE)
-# }
 
 server <- function(input, output){
 
@@ -540,11 +475,6 @@ server <- function(input, output){
     selectedSeqModel <- input$sequenceModels
   })
 
-  # observeEvent(input$fileUploadBtn, {
-  #   # load model based on radio selection
-  #   print('Testing click')
-  # })
-
 
   ## ----------- Manage Classify Btn click ---------- ##
 
@@ -558,39 +488,24 @@ server <- function(input, output){
     on.exit(values$fileStatus <- 'empty')
 
   progress <- shiny::Progress$new()
-
   on.exit(progress$close(), add=TRUE)
-  #wrkDir <- getwd()
+
   # Extract repeats from .crisprs file
   print(input$intFile$datapath)
 
+  progress$set(message = "Finding CRISPR repeats.", detail = 'This may take a few moments...', value = .05)
+  system(sprintf("%s/lib/crVSkeleton.sh -c -f %s",wrkDir, input$inFile$datapath), intern = TRUE) #TRUE
 
-  progress$set(message = "Finding CRISPR repeats.", detail = 'This may take a few minutes...', value = 10)
-  system(sprintf("%s/crVSkeleton.sh -c -f %s",wrkDir, input$inFile$datapath), intern = TRUE) #TRUE
-  #system(sprintf("%s/crVSkeleton.sh -c -f %s", wrkDir, input$inFile$datapath), intern = TRUE) #TRUE
-
-  # Test execution of python function
-  #fileParserPy$parseGenomeFile(sprintf('%s/data/meta.fasta_repeats.fa', wrkDir))
-  print(str_c("user input is ", input$inFile$datapath))
-
-  progress$set(message = "Tokenizing repeats...", detail = "",  value = 30)
+  progress$set(message = "Tokenizing repeats.", detail = 'This may take a few moments...', value = .1)
 
   analytic_df <- getSequenceAnalyticDf(input$inFile$datapath)
-  progress$set(message = "Predicting subtypes.", detail = "This may take a few minutes...",  value = 60)
-  getXGBoostPredictions(analytic_df) %>%
+  progress$set(message = "Predicting subtypes.", detail = "This may take a few moments...",  value = .1)
+  getXGBoostPredictions(analytic_df, progress) %>%
     mutate(cas_type = case_when(cas_type == 'V-J' ~ 'V-K', cas_type == "I-U" ~ "I-G", T ~ cas_type)) %>%
     return()
 
   })
 
-  ## << Repeats Text Paste >> ##
-  #repeatData <- eventReactive(input$repeatsBtn,{
-  #  print('classifying')
-  #  input$inRepeats
-  #})
-#
-  ## << Reactive Output (placeholders for now) >> ##
-  #output$model_performance <- DT::renderDataTable({read_csv("xg_model_performance_4_2020-10-19.csv")})
 
   output$classified_results <- DT::renderDataTable({
     parseResults() %>%
@@ -618,10 +533,6 @@ server <- function(input, output){
       ggplot(aes(x = n, y = Subtype, fill=Subtype)) + geom_histogram(stat = 'identity') + xlab("Locus Count by Subtype") + ylab("Subtype")
   })
 
- # output$repeatText <- renderPrint({
- #   repeatData()
- # })
-
   output$downloadData <- downloadHandler(
 
     filename = function() {
@@ -643,15 +554,8 @@ server <- function(input, output){
 
 
   output$dynamicUI <- renderUI({
-    #if (input$file_choice == ".fasta"){
-    # if(!is.null(input$inFile)){
     if(values$fileStatus == 'uploaded'){
-    #if(!is.null(file_input)){
       tagList(
-
-        #radioButtons("fullFileModels", label = h4("Choose Model"),
-        #             choices = list("CombinedBio" = 1, "RF" = 2, "CNN-DL" = 3),
-        #             selected = 1),
         actionButton(inputId = "fileUploadBtn", label = "Classify")
 
       )
@@ -663,27 +567,10 @@ server <- function(input, output){
       #if (input$file_choice == ".fasta"){
       if(!is.null(parseResults())){
         tagList(
-
-          #radioButtons("fullFileModels", label = h4("Choose Model"),
-          #             choices = list("CombinedBio" = 1, "RF" = 2, "CNN-DL" = 3),
-          #             selected = 1),
           downloadButton("downloadData", "Download")
 
         )
       }
- # } else {
- #   tagList(
- #     textAreaInput("inRepeats",
- #                   label = h4("Repeats"),
- #                   width = '100%',
- #                   height = '80px',
- #                   placeholder = "Enter Repeats (e.g.):\nGGTTTATCCCCGCTGGCGCGGGGAACAC\nGTGTTCCCCGCATCAGCGGGGATAAACCG"),
- #     radioButtons("sequenceModels", label = h4("Choose Model"),
- #                  choices = list("BernoulliNB" = 1, "CNN-DL" = 2, "ccTyper" = 3),
- #                  selected = 1),
- #     actionButton(inputId = "repeatsBtn", label = "Classify")
- #   )
- #   }
   })
 
 
@@ -691,6 +578,4 @@ server <- function(input, output){
 
 
 )}
-
-#shinyApp(ui = ui, server = server)
 

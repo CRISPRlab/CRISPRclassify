@@ -68,7 +68,7 @@ Listening on http://127.0.0.1:6923
 Alternatively, you can download the package to your local machine, and install from there.
 1. Download the **.zip** from GitHub.
 
-2. Extract the .zip file to a folder, for example, on your Desktop. The folder will be named CRISPRclassify-master.
+2. Extract the .zip file to a folder, for example, on your Desktop. The folder will be named **CRISPRclassify-master**.
 
 3. Install the package via command line:
 
@@ -120,9 +120,20 @@ The grid output contains the following columns:
 ---
 
 # Pro tips
-**Tech Note:** the current size limit is set limit uploaded file size to 135GB (gigabytes, not bases). If you wish to process a file larger than this, you'll need to set the GB_size flag in app.R to a higher number that will suit your needs:
+**Tech Note:** the current size limit is set limit uploaded file size to 200GB (gigabytes, not bases). If you wish to process a file larger than this, you'll need to download the package from GitHub, extract it to a folder, then set the GB_size flag in **app.R** to a higher number that will suit your needs. Then remove, reinstall, and reload the package.
 ```
-GB_size <- 135
+GB_size <- 200
+```
+```
+{in RStudio console or R prompt}
+remove.packages('CRISPRclassify')
+
+{on the command line}
+R CMD INSTALL CRISPRclassify-master
+
+{in RStudio console or R prompt}
+library(CRISPRclassify)
+CRISPRclassify::launchApp()
 ```
 ---
 # Troubleshooting
