@@ -119,7 +119,7 @@ The grid output contains the following columns:
 
 
  More information on the closest matching strain (in terms of repeat sequence) from the training data can be found in the **Download** file after hitting the **Download** button:
-  - Matching strain name
+  - Name of matching strain
   - Accession
   - Location of CRISPR in genome
   - CRISPR subtype previously determined by [Makarova et al.](https://pubmed.ncbi.nlm.nih.gov/31857715/)
