@@ -46,16 +46,31 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.202-b03, mixed mode)
 
   `library(devtools)`
 
-3. Install the CRISPRclassify package, and launch the app:
+3. Install the CRISPRclassify package:
 
   `install_github("CRISPRlab/CRISPRclassify")`
+
+  This command will detect any packages with more recent versions available, and display the prompt below:
+
+  <img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/packageUpdates.png" width="400">
+
+  It is recommended to at least update the following packages if listed: **dplyr, readr, magrittr, stringr, stringi, DT, xgboost, memoise, shiny, stringdist, ggplot2, and tidyr.** The installation will fail if one of the required packages does not meet the minimum version requirements:
+
+  ```
+  Error: package ‘tidyr’ 1.0.0 was found, but >= 1.1.2 is required by ‘CRISPRclassify’
+  Execution halted
+  ```
+
+  To update a specific package (tidyr, for example), run:  `install.packages('tidyr')`. Run `install_github("CRISPRlab/CRISPRclassify")` again once all required package versions have been updated.
+
+4. Load the package and launch the app!
 
   `library(CRISPRclassify)`
 
   `CRISPRclassify::launchApp()`
 
 
-The first time the launchApp() script is run, it will automatically install the required R library dependencies. Running launchApp() will automatically launch CRISPRclassify in a local web-browser window, ready for use!
+Running launchApp() will automatically launch CRISPRclassify in a local web-browser window, ready for use!
 
 **Tech Note:** The port is randomly assigned at runtime. If you close the page or are just curious about the URL, you can see the port listed in the command line output:
 
@@ -72,11 +87,20 @@ Alternatively, you can download the package to your local machine, and install f
 
 3. Install the package via command line:
 
-  `cd ~/Desktop`
+  `cd ~/Desktop` (assuming the extracted folder is on your desktop)
 
   `R CMD INSTALL CRISPRclassify-master`
 
-4. Open the RStudio console, or an R session on the command line by typing 'R'.
+  The installation will fail if one of the required packages does not meet the minimum version requirements:
+
+  ```
+  Error: package ‘tidyr’ 1.0.0 was found, but >= 1.1.2 is required by ‘CRISPRclassify’
+  Execution halted
+  ```
+
+  To update a specific package (tidyr, for example), run:  `install.packages('tidyr')` in RStudio or in an R session (start a new R session via command line by simply running the command `R`). Run `R CMD INSTALL CRISPRclassify-master` on the command line again once all required package versions have been updated.
+
+4. Open the RStudio console, or an R session on the command line by typing `R`.
 
 5. Load the CRISPRclassify package and launch the app:
 
