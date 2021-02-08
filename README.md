@@ -6,7 +6,7 @@ CRISPRclassify identifies loci from assembled genomic and metagenomic files (.fa
 
 # Installation
 
-CRISPRclassify is implemented in R and is run locally from the command line. For **MacOS** and **Linux**, just ensure you have met the R and Java dependencies below. For **Windows** users, you can use a tool like [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or another command line solution to get access to the Linux command line.
+CRISPRclassify is implemented in R and can be run in RStudio or in an R session on the command line. For **MacOS** and **Linux**, just ensure you have met the R and Java dependencies below. For **Windows** users, you can use a tool like [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) or another command line solution to get access to the Linux command line.
 
 ### Software requirements:
 - #### **R** >= version 3.6.3
@@ -38,7 +38,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.202-b03, mixed mode)
 
 ---
 ### Install Directly from GitHub (Recommended):
-1. Open the RStudio console, or start an R session on the command line by typing 'R'.
+1. Open the RStudio console, or start an R session on the command line by typing `R`.
 
 2. Install and load the devtools package, which enables installing packages from GitHub:
 
