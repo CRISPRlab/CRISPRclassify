@@ -1,4 +1,6 @@
-<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/logo.png" width="400">
+CRISPRclassify <a href='https://github.com/CRISPRlab/CRISPRclassify/'><img src='crisprclassify_hex.png' align="right" height="139" /></a>
+=================================================================================================================
+<!--<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/logo.png" width="400"> -->
 
 CRISPRclassify identifies loci from assembled genomic and metagenomic files (.fasta), and uses a *cas*-independent classification approach to predict the subtype of each locus.
 
