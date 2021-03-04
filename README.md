@@ -141,14 +141,14 @@ The grid output contains the following columns:
  - **Repeat:** Lists all distinct repeats for each locus (duplicates are excluded). Blue and yellow highlights in the repeat sequence indicate significant k-mers that were used for prediction of the subtype
  - **Repeat Count:** How many of this particular repeat are found at this locus (since duplicates are excluded from the grid)
  - **Probability:** The probability that this locus is the predicted subtype. Higher is better.
- - **Closest Strain:** Lists the strain with the closest matching repeat sequence from the original training set. Useful when working with metagenomes.
+ - **Closest Strain:** Lists the strain with the closest matching repeat sequence from the original training set. Useful when working with unknown sequences in metagenomes.
 
 
- More information on the closest matching strain (in terms of repeat sequence) from the training data can be found in the **Download** file after hitting the **Download** button:
-  - Name of matching strain
-  - Accession
-  - Location of CRISPR in genome
-  - CRISPR subtype previously determined by [Makarova et al.](https://pubmed.ncbi.nlm.nih.gov/31857715/)
+ More information on the closest matching strain (in terms of repeat similarity) from the training data can be found in the **Download** file after hitting the **Download** button:
+  - Name of the strain with the closest matching repeat sequence
+  - Accession of the matching strain
+  - Location of matching repeat locus in genome
+  - CRISPR subtype of the matching repeat locus, previously determined by [Makarova et al.](https://pubmed.ncbi.nlm.nih.gov/31857715/)
   - Matching repeat sequence
 
 ---

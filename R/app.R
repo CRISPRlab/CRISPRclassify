@@ -544,9 +544,9 @@ server <- function(input, output){
           probability = round(probability, 6)) %>%
         ungroup() %>%
         mutate(cas_type = as.factor(str_sub(cas_type, 1,15))) %>%
-        rename( `Repeat` = seq, `Subtype` = cas_type, `Probability` = probability, `Contig Name` = contig_name, `Range` = range, `Locus` = locus, `Repeat Count` = distinct_repeat_count, `Closest Strain` = closestStrain.org_desc, `Accession` = closestStrain.accession, `Location` = closestStrain.location, `Type` = closestStrain.type, `Closest Repeat` = closestStrain.repeat_seq) %>%
+        rename( `Repeat` = seq, `Subtype` = cas_type, `Probability` = probability, `Contig Name` = contig_name, `Range` = range, `Locus` = locus, `Repeat Count` = distinct_repeat_count, `Closest Strain` = closestStrain.org_desc, `Closest Strain Accession` = closestStrain.accession, `Closest Strain Location` = closestStrain.location, `Closest Strain Subtype` = closestStrain.type, `Closest Strain Repeat` = closestStrain.repeat_seq) %>%
         arrange(Locus) %>%
-        dplyr::select(Locus, `Contig Name`,  Range, `Subtype`, `Repeat`, `Repeat Count`, `Probability`, `Closest Strain`, `Accession`, `Location`, `Type`, `Closest Repeat`) %>%
+        dplyr::select(Locus, `Contig Name`,  Range, `Subtype`, `Repeat`, `Repeat Count`, `Probability`, `Closest Strain`, `Closest Strain Accession`, `Closest Strain Location`, `Closest Strain Subtype`, `Closest Strain Repeat`) %>%
       write.csv(file, row.names = FALSE)
     }
   )
