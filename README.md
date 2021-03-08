@@ -140,8 +140,9 @@ The grid output contains the following columns:
  - **Subtype:** Predicted subtype for this locus
  - **Repeat:** Lists all distinct repeats for each locus (duplicates are excluded). Blue and yellow highlights in the repeat sequence indicate significant k-mers that were used for prediction of the subtype
  - **Repeat Count:** How many of this particular repeat are found at this locus (since duplicates are excluded from the grid)
- - **Probability:** The probability that this locus is the predicted subtype. Higher is better.
+ - **Probability:** The probability that this locus is the predicted subtype. Higher is better. Predictions are considered optimal when the probability is .85 or higher.
  - **Closest Strain:** Lists the strain with the closest matching repeat sequence from the original training set. Useful when working with unknown sequences in metagenomes.
+ - **Edit Dist:** The Levenshtein distance calculated between the detected repeat and the corresponding repeat from the closest strain. An edit distance of 0 means a perfect match. An edit distance of 3, for example, indicates 3 nucleotides are mismatched between the repeats. Any matching repeats with more than 20 mismatches returns NA.
 
 
  More information on the closest matching strain (in terms of repeat similarity) from the training data can be found in the **Download** file after hitting the **Download** button:

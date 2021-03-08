@@ -342,9 +342,17 @@ getTokenDF <- function(sequence_analytic_df){
 }
 
 strainLkp <- function(repeatSeq, masterLkpDf){
-  idx <- amatch(repeatSeq, masterLkpDf$repeat_seq, nomatch=(nrow(masterLkpDf)), maxDist = 10)
+  idx <- amatch(repeatSeq, masterLkpDf$repeat_seq, nomatch=(nrow(masterLkpDf)), maxDist = 20)
   org <- masterLkpDf[idx,]
   return(org)
+}
+
+minEditDist <- function(seq1, seq2){
+  seq2 <- na_if(seq2, "Unknown")
+  fwdDist <- mapply(adist, seq1, seq2)
+  revDist <- mapply(adist, seq1, getReverseCompliment(seq2))
+  minList <- mapply(min, fwdDist, revDist)
+  return(minList)
 }
 
 getXGBoostPredictions <- function(sequence_analytic_df, progress){
@@ -394,10 +402,13 @@ getXGBoostPredictions <- function(sequence_analytic_df, progress){
   }
 
   progress$set(message = "Looking up closest strains. ", detail = 'Just a moment...', value = .98)
-  # result_df %>% write_csv("_tmp_full_output.csv")
   max_result_df <- result_df %>% group_by(unique_id) %>% filter(probability == max(probability)) %>% ungroup() %>%  select(seq,cas_type, distinct_repeat_count , probability,contig_name, range, locus)
   lkpMaster <- read_csv(str_c(wrkDir, '/csvRef/master_repeat_lkp.csv'))
-  max_result_df_lkp <- transform(max_result_df, closestStrain = strainLkp(seq, lkpMaster))
+
+  # Lookup closest matching strain by edit distance #
+  max_result_df_lkp <- transform(max_result_df, closestStrain = strainLkp(seq, lkpMaster)) %>%
+    mutate(edit_dist = minEditDist(seq, closestStrain.repeat_seq))
+
   progress$set(message = "Wrapping up. ", detail = 'Just a moment...', value = 1)
   return(max_result_df_lkp)
 }
@@ -515,9 +526,9 @@ server <- function(input, output){
              probability = round(probability, 3)) %>%
       ungroup() %>%
       mutate(cas_type = as.factor(cas_type)) %>%
-     rename( `Repeat` = seq, `Subtype` = cas_type, `Probability` = probability, `Contig` = contig_name, `Range` = range, `Locus` = locus, `Repeat Count` = distinct_repeat_count, `Closest Strain` = closestStrain.org_desc) %>%
+     rename( `Repeat` = seq, `Subtype` = cas_type, `Probability` = probability, `Contig` = contig_name, `Range` = range, `Locus` = locus, `Repeat Count` = distinct_repeat_count, `Closest Strain` = closestStrain.org_desc, `Edit Dist` = edit_dist) %>%
       arrange(Locus) %>%
-      dplyr::select(Locus, `Contig`,  Range, `Subtype`, `Repeat`, `Repeat Count`, `Probability`, `Closest Strain`)
+      dplyr::select(Locus, `Contig`,  Range, `Subtype`, `Repeat`, `Repeat Count`, `Probability`, `Closest Strain`, `Edit Dist`)
   }, filter = 'top', escape = FALSE, options = list(
     columnDefs = list(
       list(className = "nowrap", targets = "_all")
@@ -544,9 +555,9 @@ server <- function(input, output){
           probability = round(probability, 6)) %>%
         ungroup() %>%
         mutate(cas_type = as.factor(str_sub(cas_type, 1,15))) %>%
-        rename( `Repeat` = seq, `Subtype` = cas_type, `Probability` = probability, `Contig Name` = contig_name, `Range` = range, `Locus` = locus, `Repeat Count` = distinct_repeat_count, `Closest Strain` = closestStrain.org_desc, `Closest Strain Accession` = closestStrain.accession, `Closest Strain Location` = closestStrain.location, `Closest Strain Subtype` = closestStrain.type, `Closest Strain Repeat` = closestStrain.repeat_seq) %>%
+        rename( `Repeat` = seq, `Subtype` = cas_type, `Probability` = probability, `Contig Name` = contig_name, `Range` = range, `Locus` = locus, `Repeat Count` = distinct_repeat_count, `Closest Strain` = closestStrain.org_desc, `Closest Strain Accession` = closestStrain.accession, `Closest Strain Location` = closestStrain.location, `Closest Strain Subtype` = closestStrain.type, `Closest Strain Repeat` = closestStrain.repeat_seq, `Edit Dist` = edit_dist) %>%
         arrange(Locus) %>%
-        dplyr::select(Locus, `Contig Name`,  Range, `Subtype`, `Repeat`, `Repeat Count`, `Probability`, `Closest Strain`, `Closest Strain Accession`, `Closest Strain Location`, `Closest Strain Subtype`, `Closest Strain Repeat`) %>%
+        dplyr::select(Locus, `Contig Name`,  Range, `Subtype`, `Repeat`, `Repeat Count`, `Probability`, `Closest Strain`, `Closest Strain Accession`, `Closest Strain Location`, `Closest Strain Subtype`, `Closest Strain Repeat`, `Edit Dist`) %>%
       write.csv(file, row.names = FALSE)
     }
   )
