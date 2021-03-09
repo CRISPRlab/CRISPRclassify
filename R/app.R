@@ -541,7 +541,6 @@ server <- function(input, output){
       print('A valid CRISPRS file was generated.')
     } else {
       print('No valid CRISPRS file was found.')
-      ## TODO: show modal telling the user no crisprs could be found
       showModal(modalDialog(
         title = "No CRISPR loci detected",
         "No detectable CRISPR loci could be found in this genome file. Upload a different genome/metagenome to continue searching for CRISPR loci.",
