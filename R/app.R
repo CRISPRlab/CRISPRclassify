@@ -213,8 +213,17 @@ getSpacerDf <- function(spacer_file, datapath){
     ungroup()
   return(spacer_df)
 }
-# getSequenceAnalyticDf <- function(crispr_file = "data/meta.fasta.crisprs", spacer_file = "data/meta.fasta_spacers.fa", repeat_file = "data/meta.fasta_repeats.fa"){
 
+checkCrisprExists <- function(datapath){
+  crispr_file = paste(datapath, ".crisprs", sep="")
+  crispr_df <- read_csv(crispr_file, col_names = F)
+
+  if (nrow(crispr_df) <= 0){
+    return(FALSE)
+  }
+
+  return(TRUE)
+}
 
 
 getSequenceAnalyticDf <- function(datapath){
@@ -413,6 +422,26 @@ getXGBoostPredictions <- function(sequence_analytic_df, progress){
   return(max_result_df_lkp)
 }
 
+createDummyTable <- function(){
+  dummy_df <- data.frame(seq=character(),
+                         cas_type=character(),
+                         distinct_repeat_count=integer(),
+                         probability=double(),
+                         contig_name=character(),
+                         range=character(),
+                         locus=integer(),
+                         closestStrain.org_desc=character(),
+                         closestStrain.accession=character(),
+                         closestStrain.location=character(),
+                         closestStrain.type=character(),
+                         closestStrain.repeat_seq=character(),
+                         edit_dist=integer(),
+                         stringsAsFactors=FALSE)
+
+  dummy_df <- dummy_df %>% add_row(seq='',cas_type='',distinct_repeat_count=0,probability=0,contig_name='',range='',locus=0,closestStrain.org_desc='',closestStrain.accession='',closestStrain.location='',closestStrain.type='',closestStrain.repeat_seq='',edit_dist=0)
+  return(dummy_df)
+}
+
 
 
 ## ------------------------- SHINY APP BEGIN --------------------- ##
@@ -498,22 +527,37 @@ server <- function(input, output){
 
     on.exit(values$fileStatus <- 'empty')
 
-  progress <- shiny::Progress$new()
-  on.exit(progress$close(), add=TRUE)
+    progress <- shiny::Progress$new()
+    on.exit(progress$close(), add=TRUE)
 
-  # Extract repeats from .crisprs file
-  print(input$intFile$datapath)
+    # Extract repeats from .crisprs file
+    print(input$inFile$datapath)
 
-  progress$set(message = "Finding CRISPR repeats.", detail = 'This may take a few moments...', value = .05)
-  system(sprintf("%s/lib/crVSkeleton.sh -c -f %s",wrkDir, input$inFile$datapath), intern = TRUE) #TRUE
+    progress$set(message = "Finding CRISPR repeats.", detail = 'This may take a few moments...', value = .05)
+    system(sprintf("%s/lib/crVSkeleton.sh -c -f %s",wrkDir, input$inFile$datapath), intern = TRUE) #TRUE
 
-  progress$set(message = "Tokenizing repeats.", detail = 'This may take a few moments...', value = .1)
+    print('Checking CRISPR exists: ')
+    if (checkCrisprExists(input$inFile$datapath)){
+      print('A valid CRISPRS file was generated.')
+    } else {
+      print('No valid CRISPRS file was found.')
+      ## TODO: show modal telling the user no crisprs could be found
+      showModal(modalDialog(
+        title = "No CRISPR loci detected",
+        "No detectable CRISPR loci could be found in this genome file. Upload a different genome/metagenome to continue searching for CRISPR loci.",
+        easyClose = TRUE,
+        footer = modalButton("Dismiss")
+      ))
+      return(createDummyTable())
+    }
 
-  analytic_df <- getSequenceAnalyticDf(input$inFile$datapath)
-  progress$set(message = "Predicting subtypes.", detail = "This may take a few moments...",  value = .1)
-  getXGBoostPredictions(analytic_df, progress) %>%
-    mutate(cas_type = case_when(cas_type == 'V-J' ~ 'V-K', cas_type == "I-U" ~ "I-G", T ~ cas_type)) %>%
-    return()
+    progress$set(message = "Tokenizing repeats.", detail = 'This may take a few moments...', value = .1)
+
+    analytic_df <- getSequenceAnalyticDf(input$inFile$datapath)
+    progress$set(message = "Predicting subtypes.", detail = "This may take a few moments...",  value = .1)
+    getXGBoostPredictions(analytic_df, progress) %>%
+      mutate(cas_type = case_when(cas_type == 'V-J' ~ 'V-K', cas_type == "I-U" ~ "I-G", T ~ cas_type)) %>%
+      return()
 
   })
 

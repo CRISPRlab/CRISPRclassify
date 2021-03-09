@@ -1,6 +1,6 @@
 #!/bin/bash
 #USAGE:
-#	crisprviz.sh   [-f fasta filename -optional] 
+#	crisprviz.sh   [-f fasta filename -optional]
 #				[-c clean (BOOLEAN)-optional]
 #				[-p run in parallel (BOOLEAN) -optional]
 #				[-x split loci (BOOLEAN) -optional]
@@ -15,7 +15,7 @@
 
 while getopts f:cr:b:e:m:n:hpstxi name
 do
-	case $name in 
+	case $name in
 		p) popt=1;;
 		h) hopt=1;;
 		f) fopt=$OPTARG;;
@@ -45,11 +45,11 @@ CRISPRviz <>||<>||<>, a tool for spacer|repeat identification and exploration in
 
 Usage: crisprviz.sh [OPTIONS]
 
-Options:	-t test installation. Will run the pipeline on a set of test data. Go to localhost:4444 in your browser to see results	
-		-p 	parallel processing. Concurrently processes all genome.fasta files in current directory | (recommended for < 50 - 100 files) 	
+Options:	-t test installation. Will run the pipeline on a set of test data. Go to localhost:4444 in your browser to see results
+		-p 	parallel processing. Concurrently processes all genome.fasta files in current directory | (recommended for < 50 - 100 files)
 		-s 	run crisprviz_engine only. Use when spacers|repeats have already been extracted.
 		-x 	split loci. Each loci gets listed as a separate row in web tool results
-		-f 	.fasta genome filename - file must be in ".fasta" format. *NOTE: Locates file in current directory ONLY | (optional) 
+		-f 	.fasta genome filename - file must be in ".fasta" format. *NOTE: Locates file in current directory ONLY | (optional)
 		-c 	clean. remove *.crisprs, *_spacers.fa, *.crisprs.fa prior to execution | (optional)
 		-r 	min # of repeats | Default = 4 | (optional)
 		-b 	min length of CRIPSR repeats in array | Default = 23 (optional)
@@ -96,14 +96,14 @@ fi
 ## only run spacer compression engine
 # if [[ -n $sopt && $sopt -gt 0 ]]; then
 # 	SPACER_INPUT_FILE=""
-# 	if [ ! -z $fopt ]; then 
+# 	if [ ! -z $fopt ]; then
 # 		SPACER_INPUT_FILE=${fopt}
 # 		# must be *_spacers.fa format
 # 		execute_spacer_analysis ${SPACER_INPUT_FILE}
 # 		exit 1
 # 	fi
 
-# 	${CRISPRVIS_ENGINE} "-p${SOURCE_DIR}" 
+# 	${CRISPRVIS_ENGINE} "-p${SOURCE_DIR}"
 # 	exit 1
 # fi
 
@@ -119,31 +119,31 @@ echo "Beginning crispr locus analysis..."
 
 ##setup basic run params
 MIN_REPEATS="-minNR 4"
-if [ ! -z $ropt ]; then 
+if [ ! -z $ropt ]; then
 	MIN_REPEATS="-minNR $ropt"
 	echo "Setting min # of repeats: $MIN_REPEATS"
 fi
 
 MIN_REPEAT_LEN=""
-if [ ! -z $bopt ]; then 
+if [ ! -z $bopt ]; then
 	MIN_REPEAT_LEN=" -minRL $bopt"
 	echo "Setting min length of repeats: $MIN_REPEAT_LEN"
 fi
 
 MAX_REPEAT_LEN=""
-if [ ! -z $eopt ]; then 
+if [ ! -z $eopt ]; then
 	MAX_REPEAT_LEN=" -maxRL $eopt"
 	echo "Setting max length of repeats: $MAX_REPEAT_LEN"
 fi
 
 MIN_SPACER_LEN=""
-if [ ! -z $mopt ]; then 
+if [ ! -z $mopt ]; then
 	MIN_SPACER_LEN=" -minSL $mopt"
 	echo "Setting min length of spacers: $MIN_SPACER_LEN"
 fi
 
 MAX_SPACER_LEN=""
-if [ ! -z $nopt ]; then 
+if [ ! -z $nopt ]; then
 	MAX_SPACER_LEN=" -maxSL $nopt"
 	echo "Setting max length of spacers: $MAX_SPACER_LEN"
 fi
@@ -153,13 +153,13 @@ extract_repeats () {
 	#check for single file run
 	if [ ! -z ${1} ]; then
 		gen_repeat_file "${1}"
-	else 
+	else
 		CRISPR_FILES=()
 		while IFS=  read -r -d $'\0'; do
 	    	CRISPR_FILES+=("$REPLY")
 		done < <(find . -maxdepth 1 -name '*.crisprs' -print0)
 		echo "Total .crisprs files available in directory: ${#CRISPR_FILES[@]}"
-		
+
 		for i in "${CRISPR_FILES[@]}"
 		do
 			gen_repeat_file "${i}"
@@ -242,7 +242,7 @@ get_repeat_files () {
 
 # 			awk 'NR % 2 == 1' "${file}" > "${file}.tmp"
 # 			# echo "File: ${file}.tmp"
-			
+
 # 			while IFS='' read -r line || [[ -n "${line}" ]]; do
 #     			# echo "Text read from file: ${line}"
 #     			IFS='_ ' read -r -a line_array <<< "${line}"
@@ -317,7 +317,7 @@ remove_null_results () {
 
 #check for single file parameter
 INPUT_FILE=""
-if [ ! -z $fopt ]; then 
+if [ ! -z $fopt ]; then
 	echo "Setting input file: "${fopt}
 	INPUT_FILE="$fopt"
 
@@ -334,6 +334,6 @@ fi
 
 echo "Minced parsing completed @: " $(date)
 
-exit 1
+exit 0
 
 
