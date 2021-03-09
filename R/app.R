@@ -407,7 +407,7 @@ getXGBoostPredictions <- function(sequence_analytic_df, progress){
 
     }
 
-    else {print("file doesnt exist")}
+    else {print("Subtype excluded due to low volume")}
   }
 
   progress$set(message = "Looking up closest strains. ", detail = 'Just a moment...', value = .98)
