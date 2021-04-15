@@ -1,0 +1,16 @@
+loadRequires <- function(){
+  require(shiny)
+  require(dplyr)
+  require(stringr)
+  require(magrittr)
+  require(readr)
+  require(xgboost)
+  require(DT)
+  require(memoise)
+  require(tidyr)
+  require(stringi)
+  require(stringdist)
+  require(ggplot2)
+  require(fs)
+  require(tools)
+}
