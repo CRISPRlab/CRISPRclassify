@@ -6,8 +6,6 @@
 #' @export
 launchApp <- function() {
 
-  CRISPRclassify:::loadRequires()
-
   ## Load HC vars ##
   wrkDir <- CRISPRclassify:::getWrkDir()
   xg_matrix_format_file <- CRISPRclassify:::getMatrixFormatFile(wrkDir)
@@ -195,7 +193,6 @@ classifyRepeats <- function(repeatFile){
   validateFileArg(repeatFile, c('csv','txt','tsv'))
 
   ## Load HC vars ##
-  CRISPRclassify:::loadRequires()
   wrkDir <- CRISPRclassify:::getWrkDir()
   xg_matrix_format_file <- CRISPRclassify:::getMatrixFormatFile(wrkDir)
   cas_vect <- CRISPRclassify:::getCasVect()

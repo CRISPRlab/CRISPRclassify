@@ -336,7 +336,8 @@ getXGBoostPredictions <- function(sequence_analytic_df, progress, xg_matrix_form
 
     if (file.exists(CRISPRclassify:::getModelFilePath(cas, wrkDir))){
       cas_feature_vect <- read_csv(xg_matrix_format_file, col_names = F) %>% filter(X1 == cas) %>% dplyr::select(X3) %>% pull()
-      feature_df <- bio_feat_df %>% select_at(cas_feature_vect) #%>% dplyr::select(-unique_id)
+      # feature_df <- bio_feat_df %>% select_at(cas_feature_vect)
+      feature_df <- bio_feat_df %>% select(one_of(cas_feature_vect))
       feature_mat <- feature_df %>%  as.matrix()
       bstSparse <- getXGModelCache(cas, wrkDir)
       feature_sparse_mat <- as(feature_mat, "dgCMatrix")
