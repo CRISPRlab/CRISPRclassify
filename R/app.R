@@ -6,6 +6,9 @@
 #' @export
 launchApp <- function() {
 
+  ## Load required packages ##
+  CRISPRclassify:::loadRequires()
+
   ## Load HC vars ##
   wrkDir <- CRISPRclassify:::getWrkDir()
   xg_matrix_format_file <- CRISPRclassify:::getMatrixFormatFile(wrkDir)
@@ -186,6 +189,9 @@ server <- function(input, output){
 #' @export
 classifyRepeats <- function(repeatFile){
 
+  ## Load required packages ##
+  CRISPRclassify:::loadRequires()
+
   ## Check if file exists ##
   CRISPRclassify:::checkFileExists(repeatFile)
 
@@ -213,6 +219,9 @@ classifyRepeats <- function(repeatFile){
 #' classifyFasta('/path/to/file.fasta')
 #' @export
 classifyFasta <- function(fastaFile){
+
+  ## Load required packages ##
+  CRISPRclassify:::loadRequires()
 
   ## Check if file exists ##
   CRISPRclassify:::checkFileExists(fastaFile)
