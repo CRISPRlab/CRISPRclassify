@@ -103,7 +103,7 @@ server <- function(input, output){
     if (nrow(analytic_df) == 1){
       firstRow <- analytic_df %>% slice_head(n=1)
 
-      if (firstRow$seq == "" & firstRow$cas_type == ""){
+      if (firstRow$seq == ""){
         # all potential CRISPR loci were filtered out during false positive filtering
         CRISPRclassify:::presentModal('No valid CRISPR loci found', 'No valid CRISPR loci could be found after filtering for false positives. Upload a different genome/metagenome to continue searching for CRISPR loci.')
         return(analytic_df)
@@ -248,7 +248,7 @@ classifyFasta <- function(fastaFile){
 
   if (nrow(analytic_df) == 1){
     firstRow <- analytic_df %>% slice_head(n=1)
-    if (firstRow$seq == "" & firstRow$cas_type == ""){
+    if (firstRow$seq == ""){
       # all potential crispr loci were filtered out during false positive filtering
       stop("ERROR: No valid CRISPR loci could be found after filtering for false positives. Upload a different genome/metagenome to continue searching for CRISPR loci.")
     }
