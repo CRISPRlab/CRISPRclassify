@@ -98,7 +98,7 @@ getShinyUI <- function(css){
 
 getFeatureImportance <- function(type){
   feat_imp_file <- CRISPRclassify:::getFeatImpFile(CRISPRclassify:::getWrkDir())
-  read_csv(feat_imp_file, col_names = F) %>%
+  read_csv(feat_imp_file, col_names = F, col_types = cols()) %>%
     filter(X5 == type,
            !X1 %in% c("gc", "palIdx", "length")) %>%
     group_by(X5) %>%

@@ -1,3 +1,12 @@
+validateJava <- function(){
+  javaResult <- system("java -version")
+  if (javaResult != 0){
+    stop('Java could not be detected on your system. Please ensure java is installed and accessible from the command line.')
+  } else {
+    print('...Java installation detected...')
+  }
+}
+
 checkFileExists <- function(fileWithPath){
   if (!file.exists(fileWithPath)){
     stop(paste0('ERROR: the specified file or path could not be located on your system: "',fileWithPath,'"'))
@@ -51,7 +60,7 @@ getPalIdx <- function(seq){
 }
 
 getFasta <- function(file_path){
-  read_csv(file_path, col_names = F) %>%
+  read_csv(file_path, col_names = F, col_types = cols()) %>%
     mutate(X2 = lead(X1)) %>%
     dplyr::rename(id = X1, sequence = X2) %>%
     filter(!str_detect(sequence, ">")) %>%
@@ -80,7 +89,7 @@ getContigName <- function(id){
 
 checkCrisprExists <- function(datapath){
   crispr_file = paste(datapath, ".crisprs", sep="")
-  crispr_df <- read_csv(crispr_file, col_names = F)
+  crispr_df <- read_csv(crispr_file, col_names = F, col_types = cols())
 
   if (nrow(crispr_df) <= 0){
     return(FALSE)
@@ -260,7 +269,7 @@ getAllFastaDtl <- function(datapath){
 
   crispr_file = paste(datapath, ".crisprs", sep="")
 
-  crispr_df <- read_csv(crispr_file, col_names = F) %>%  rename(dat = 1)
+  crispr_df <- read_csv(crispr_file, col_names = F, col_types = cols()) %>%  rename(dat = 1)
   all_info_fasta_df <- tibble(
     contig = getContigLabels(crispr_df$dat),
     locus = getLocusNamesLabels(crispr_df$dat),
@@ -313,7 +322,7 @@ getXGBoostPredictions <- function(sequence_analytic_df, progress, xg_matrix_form
 
   getXGModelCache <- getXGModel
 
-  all_feat_vect <- read_csv(xg_matrix_format_file, col_names = F) %>% dplyr::select(X3) %>% distinct() %>% pull()
+  all_feat_vect <- read_csv(xg_matrix_format_file, col_names = F, col_types = cols()) %>% dplyr::select(X3) %>% distinct() %>% pull()
   token_df <- CRISPRclassify:::getTokenDF(sequence_analytic_df)
   bio_feat_df <- sequence_analytic_df %>% inner_join(token_df, by = "unique_id")
 
@@ -335,8 +344,7 @@ getXGBoostPredictions <- function(sequence_analytic_df, progress, xg_matrix_form
     }
 
     if (file.exists(CRISPRclassify:::getModelFilePath(cas, wrkDir))){
-      cas_feature_vect <- read_csv(xg_matrix_format_file, col_names = F) %>% filter(X1 == cas) %>% dplyr::select(X3) %>% pull()
-      # feature_df <- bio_feat_df %>% select_at(cas_feature_vect)
+      cas_feature_vect <- read_csv(xg_matrix_format_file, col_names = F, col_types = cols()) %>% filter(X1 == cas) %>% dplyr::select(X3) %>% pull()
       feature_df <- bio_feat_df %>% select(one_of(cas_feature_vect))
       feature_mat <- feature_df %>%  as.matrix()
       bstSparse <- getXGModelCache(cas, wrkDir)
@@ -361,7 +369,7 @@ getXGBoostPredictions <- function(sequence_analytic_df, progress, xg_matrix_form
   }
   max_result_df <- result_df %>% group_by(unique_id) %>% filter(probability == max(probability)) %>% ungroup() %>%  select(seq,cas_type, distinct_repeat_count , probability,contig_name, range, locus)
 
-  lkpMaster <- read_csv(str_c(wrkDir, '/csvRef/master_repeat_lkp.csv'))
+  lkpMaster <- read_csv(str_c(wrkDir, '/csvRef/master_repeat_lkp.csv'), col_types = cols())
 
   # Lookup closest matching strain by edit distance #
   max_result_df_lkp <- transform(max_result_df, closestStrain = CRISPRclassify:::strainLkp(seq, lkpMaster)) %>%

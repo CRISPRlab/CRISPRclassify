@@ -20,7 +20,7 @@ getXGBoostPredictionsForRPPL <- function(sequence_analytic_df, xg_matrix_format_
 
   getXGModelCache <- CRISPRclassify:::getXGModel
 
-  all_feat_vect <- read_csv(xg_matrix_format_file, col_names = F) %>% dplyr::select(X3) %>% distinct() %>% pull()
+  all_feat_vect <- read_csv(xg_matrix_format_file, col_names = F, col_types = cols()) %>% dplyr::select(X3) %>% distinct() %>% pull()
 
   # add seq and unique id
   sequence_analytic_df <- sequence_analytic_df %>%
@@ -45,8 +45,7 @@ getXGBoostPredictionsForRPPL <- function(sequence_analytic_df, xg_matrix_format_
     print(str_c("running: ", cas))
 
     if (file.exists(CRISPRclassify:::getModelFilePath(cas, wrkDir))){
-      cas_feature_vect <- read_csv(xg_matrix_format_file, col_names = F) %>% filter(X1 == cas) %>% dplyr::select(X3) %>% pull()
-      # feature_df <- bio_feat_df %>% select_at(cas_feature_vect)
+      cas_feature_vect <- read_csv(xg_matrix_format_file, col_names = F, col_types = cols()) %>% filter(X1 == cas) %>% dplyr::select(X3) %>% pull()
       feature_df <- bio_feat_df %>% select(one_of(cas_feature_vect))
       feature_mat <- feature_df %>%  as.matrix()
       bstSparse <- getXGModelCache(cas, wrkDir)
@@ -70,7 +69,7 @@ getXGBoostPredictionsForRPPL <- function(sequence_analytic_df, xg_matrix_format_
 
   max_result_df <- result_df %>% group_by(id) %>% filter(probability == max(probability)) %>% ungroup() %>%  select(seq,cas_type , probability)
 
-  lkpMaster <- read_csv(str_c(wrkDir, '/csvRef/master_repeat_lkp.csv'))
+  lkpMaster <- read_csv(str_c(wrkDir, '/csvRef/master_repeat_lkp.csv'), col_types = cols())
 
   # Lookup closest matching strain by edit distance #
   max_result_df_lkp <- transform(max_result_df, closestStrain = CRISPRclassify:::strainLkp(seq, lkpMaster)) %>%

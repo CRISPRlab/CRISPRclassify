@@ -6,6 +6,9 @@
 #' @export
 launchApp <- function() {
 
+  ## Java check ##
+  CRISPRclassify:::validateJava()
+
   ## Load HC vars ##
   wrkDir <- CRISPRclassify:::getWrkDir()
   xg_matrix_format_file <- CRISPRclassify:::getMatrixFormatFile(wrkDir)
@@ -123,7 +126,7 @@ server <- function(input, output){
              probability = round(probability, 3)) %>%
       ungroup() %>%
       mutate(cas_type = as.factor(cas_type)) %>%
-     rename( `Repeat` = seq, `Subtype` = cas_type, `Probability` = probability, `Contig` = contig_name, `Range` = range, `Locus` = locus, `Repeat Count` = distinct_repeat_count, `Closest Strain` = closestStrain.org_desc, `Edit Dist` = edit_dist) %>%
+      rename( `Repeat` = seq, `Subtype` = cas_type, `Probability` = probability, `Contig` = contig_name, `Range` = range, `Locus` = locus, `Repeat Count` = distinct_repeat_count, `Closest Strain` = closestStrain.org_desc, `Edit Dist` = edit_dist) %>%
       arrange(Locus) %>%
       dplyr::select(Locus, `Contig`,  Range, `Subtype`, `Repeat`, `Repeat Count`, `Probability`, `Closest Strain`, `Edit Dist`)
   }, filter = 'top', escape = FALSE, options = list(
@@ -186,6 +189,9 @@ server <- function(input, output){
 #' @export
 classifyRepeats <- function(repeatFile){
 
+  ## Java check ##
+  CRISPRclassify:::validateJava()
+
   ## Check if file exists ##
   CRISPRclassify:::checkFileExists(repeatFile)
 
@@ -198,7 +204,7 @@ classifyRepeats <- function(repeatFile){
   cas_vect <- CRISPRclassify:::getCasVect()
 
   ## Read in .txt file ##
-  repeat_df <- read_csv(repeatFile, col_names=FALSE) %>%
+  repeat_df <- read_csv(repeatFile, col_names=FALSE, col_types = cols()) %>%
     rename(sequence = X1)
 
   ## Derive bio features ##
@@ -213,6 +219,9 @@ classifyRepeats <- function(repeatFile){
 #' classifyFasta('/path/to/file.fasta')
 #' @export
 classifyFasta <- function(fastaFile){
+
+  ## Java check ##
+  CRISPRclassify:::validateJava()
 
   ## Check if file exists ##
   CRISPRclassify:::checkFileExists(fastaFile)
