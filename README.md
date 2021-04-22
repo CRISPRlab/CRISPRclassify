@@ -141,7 +141,7 @@ or using only the file name without the path:
 
 
 ## Classify repeats directly with classifyRepeats()
-To use repeats derived from another CRISPR detection tool, first format them into a **.txt** or **.csv** file, with one repeat per line, without spaces or punctuation marks (commas, quotes, etc.). The file should look like the this in a text editor:
+To classify repeats derived from another CRISPR detection tool, first format them into a **.txt** or **.csv** file, with one repeat per line, without spaces or punctuation marks (commas, quotes, etc.). The file should look like the this in a text editor:
 
 <img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/repeat_format.png" width="300">
 
