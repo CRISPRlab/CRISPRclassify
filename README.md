@@ -2,7 +2,7 @@ CRISPRclassify <a href='https://github.com/CRISPRlab/CRISPRclassify/'><img src='
 =================================================================================================================
 <!--<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/logo.png" width="400"> -->
 
-CRISPRclassify identifies loci from assembled genomic and metagenomic files (.fasta), and uses a *cas*-independent classification approach to predict the subtype of each locus.
+CRISPRclassify identifies loci from assembled genomic and metagenomic files (.fasta), and uses a *cas*-independent classification approach to predict the subtype of each locus. CRISPRclassify can be used via web-interface, or executed directly from the command line.
 
 <!-- For more information, please see paper: [CRISPR Visualizer: rapid identification and visualization of CRISPR loci via an automated high-throughput processing pipeline](https://doi.org/10.1080/15476286.2018.1493332). -->
 
@@ -114,6 +114,48 @@ Alternatively, you can download the package to your local machine, and install f
 Once the app is running, you will see this page:
 
 <img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/start.png" width="800">
+
+
+---
+# Command Line Methods
+To run analyses without going through the UI, you can use the following methods. These methods can be executed directly on the command line, just make sure to update the path to your .fasta or repeat.txt file. **Note:** if you are executing this command in the same directory as the file you want to classify, you only need to include the name of the file. However, we recommend providing the full file path to avoid '**File Not Found**' errors. Both examples are illustrated below.
+
+#### Output:
+
+Both **classifyFasta()** and **classifyRepeats()** output a **.crclass** file with classification results, located in the same directory as the file that was classified.
+
+## Classify FASTA files with classifyFasta()
+Extract and classify repeats from a genome in .fasta format:
+#### Command line:
+`Rscript -e 'library(CRISPRclassify); CRISPRclassify::classifyFasta("/Users/yourusername/Desktop/example_DGCC7710.fasta")'`
+
+or using only the file name without the path:
+
+`Rscript -e 'library(CRISPRclassify); CRISPRclassify::classifyFasta("example_DGCC7710.fasta")'`
+
+#### RStudio (requires full file path):
+`library(CRISPRclassify)`
+
+`CRISPRclassify::classifyFasta("/Users/yourusername/Desktop/example_DGCC7710.fasta")`
+
+
+
+## Classify repeats directly with classifyRepeats()
+To use repeats derived from another CRISPR detection tool, first format them into a **.txt** or **.csv** file, with one repeat per line, without spaces or punctuation marks (commas, quotes, etc.). The file should look like the this in a text editor:
+
+<img src="https://github.com/CRISPRlab/CRISPRclassify/blob/master/img/repeat_format.png" width="300">
+
+#### Command line:
+`Rscript -e 'library(CRISPRclassify); CRISPRclassify::classifyRepeats("/Users/yourusername/Desktop/test_repeats.txt")'`
+
+or using only the file name without the path:
+
+`Rscript -e 'library(CRISPRclassify); CRISPRclassify::classifyRepeats("test_repeats.txt")'`
+
+#### RStudio (requires full file path):
+`library(CRISPRclassify)`
+
+`CRISPRclassify::classifyRepeats("/Users/yourusername/Desktop/test_repeats.txt")`
 
 
 
