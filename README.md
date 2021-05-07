@@ -197,7 +197,7 @@ The grid output contains the following columns:
 ---
 
 # Retraining Models
-It is possible to train your own custom models or extend ours with new data as it becomes available. A general outline on how to prepare data and train models in R is available in the [CRISPRclassify_model_retraining_guide.pdf document.](https://github.com/CRISPRlab/CRISPRclassify/CRISPRclassify_model_retraining_guide.pdf)
+It is possible to train your own custom models or extend ours with new data as it becomes available. A general outline on how to prepare data and train models in R is available in the [CRISPRclassify_model_retraining_guide.pdf](https://github.com/CRISPRlab/CRISPRclassify/blob/master/CRISPRclassify_model_retraining_guide.pdf) document.
 
 
 
