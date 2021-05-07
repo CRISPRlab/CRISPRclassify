@@ -196,6 +196,11 @@ The grid output contains the following columns:
 
 ---
 
+# Retraining Models
+It is possible to train your own custom models or extend ours with new data as it becomes available. A general outline on how to prepare data and train models in R is available in the [CRISPRclassify_model_retraining_guide.pdf document.](https://github.com/CRISPRlab/CRISPRclassify/CRISPRclassify_model_retraining_guide.pdf)
+
+
+
 # Pro tips
 **Tech Note:** the current size limit is set limit uploaded file size to 200GB (gigabytes, not bases). If you wish to process a file larger than this, you'll need to download the package from GitHub, extract it to a folder, then set the GB_size flag in **app.R** to a higher number that will suit your needs. Then remove, reinstall, and reload the package.
 ```
