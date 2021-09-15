@@ -4,7 +4,7 @@ CRISPRclassify <a href='https://github.com/CRISPRlab/CRISPRclassify/'><img src='
 
 CRISPRclassify identifies loci from assembled genomic and metagenomic files (.fasta), and uses a *cas*-independent classification approach to predict the subtype of each locus. CRISPRclassify can be used via web-interface, or executed directly from the command line.
 
-<!-- For more information, please see paper: [CRISPR Visualizer: rapid identification and visualization of CRISPR loci via an automated high-throughput processing pipeline](https://doi.org/10.1080/15476286.2018.1493332). -->
+More information can be found in the publication: [CRISPRclassify: repeat-based classification of CRISPR loci](https://doi.org/10.1089/crispr.2021.0021). 
 
 # Installation
 
