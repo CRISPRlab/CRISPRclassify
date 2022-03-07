@@ -64,7 +64,8 @@ getFasta <- function(file_path){
     mutate(X2 = lead(X1)) %>%
     dplyr::rename(id = X1, sequence = X2) %>%
     filter(!str_detect(sequence, ">")) %>%
-    mutate(id = str_replace_all(id, ">", "")) %>% return()
+    mutate(id = str_replace_all(id, ">", "")) %>%
+    mutate(id = str_replace_all(id, "\\|", "")) %>% return()
 }
 getSpacerId <- function(seq){
   parsed_vect <- seq %>% str_replace_all( c("CRISPR_" = "|", "_spacer_" = "|")) %>% str_split("\\|",  simplify = T)
