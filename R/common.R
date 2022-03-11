@@ -283,7 +283,8 @@ getAllFastaDtl <- function(datapath){
     mutate(contig_id = trimws(str_replace_all(contig_id," bp\\)", "")),
            locus_id = trimws(str_sub(locus, 7, nchar(strsplit(locus, 'Range')[[1]][1])))) %>%
     separate(locus, c(NA, "range"), sep = "Range: ") %>%
-    mutate(range = str_replace_all(range, "\\s" , ""))  #%>% group_by(contig_name, contig_id, range, repeat_sequence, locus_id) %>% tally() %>% rename(spacer_n = n) %>% ungroup()
+    mutate(range = str_replace_all(range, "\\s" , "")) %>%
+    mutate(contig_name = str_replace_all(contig_name, "\\|", ""))
 
   return(all_info_fasta_df)
 
