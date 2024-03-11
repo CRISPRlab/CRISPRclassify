@@ -1,7 +1,7 @@
 Package: CRISPRclassify
 Type: Package
 Title: CRISPRclassify: repeat-based classification of CRISPR loci
-Version: 1.1.0
+Version: 1.1.1
 Author: Matthew Nethery, Michael Korvink
 Maintainer: <manether@ncsu.edu>
 Description: CRISPRclassify identifies loci from assembled genomic and metagenomic files (.fasta), and uses a *cas*-independent classification approach to predict the subtype of each locus.
