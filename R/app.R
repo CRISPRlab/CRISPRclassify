@@ -213,6 +213,8 @@ classifyRepeats <- function(repeatFile){
   ## Classify ##
   writedf <- CRISPRclassify:::getXGBoostPredictionsForRPPL(repeat_expanded_df, xg_matrix_format_file, cas_vect, wrkDir)
   writedf %>% write.csv(paste0(repeatFile,'.crclass'), row.names = FALSE)
+
+  return(writedf)
 }
 
 #' @examples
@@ -257,6 +259,8 @@ classifyFasta <- function(fastaFile){
   rename = TRUE
   writedf <- CRISPRclassify:::getXGBoostPredictions(analytic_df, NULL, xg_matrix_format_file, cas_vect, wrkDir, rename)
   writedf %>% write.csv(paste0(fastaFile,'.crclass'), row.names = FALSE)
+
+  return(writedf)
 }
 
 
